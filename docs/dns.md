@@ -23,3 +23,5 @@ include old state (old and new - doug kinney)
 internal 172 network
 currently bind is primary
 corp vs .com
+
+rest api and query servers (chat with guys about it)
