@@ -137,6 +137,7 @@ endif
 
 
 " color settings (if terminal/gui supports it)
+set t_Co=256
 if &t_Co > 2 || has("gui_running")
   syntax on          " enable colors
   colorscheme ir_black
