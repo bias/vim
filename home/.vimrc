@@ -1,19 +1,3 @@
-" Local vimrc enhancements
-" Diederik van der Boor <vdboor --at-- codingdomain.com>
-"
-" Use ":help <option>" or ":help options"
-" for information about the various settings
-
-
-" Special defined keys:
-" F2  - comment the selected lines in visual mode
-" F3  - uncomment the selected lines in visual mode
-" F4  - console menu
-" F7  - launch spell checker (requires vimspell plugin)
-" F10 - enable paste mode
-" F11 - disable paste mode 
-
-
 " reset to vim-defaults
 if &compatible          " only if not set before:
   set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
@@ -49,15 +33,11 @@ set shiftwidth=4        " spaces for autoindents
 "set expandtab           " turn a tabs into spaces
 
 
-" misc settings
 set fileformat=unix     " file mode is unix
 set fileformats=unix    " only detect unix file format, displays that ^M with dos files
 
 set viminfo='20,\"500   " read/write a .viminfo file -- 20 jump links, regs up to 500 lines
 set history=50          " keep 50 lines of command history
-
-set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode)
-"set selectmode=mouse    " start selection when using mouse
 
 "set swapsync=sync       " the swap is synced with sync, not fsync
 "set updatecount=20      " Number of characters typed before doing an update
@@ -69,12 +49,6 @@ set mouse=v             " use mouse in visual mode (not normal,insert,command,he
 " Suffixes that get lower priority when doing tab completion for filenames.
 " These are files we are not likely to want to edit or read.
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc,.class
-
-
-" I can't type..!
-nmap :W :w
-nmap :X :x
-nmap :Q :q
 
 
 " Disable the annoying Ex mode, use Q for formatting
@@ -92,11 +66,11 @@ set pastetoggle=<F11>
 " " if you paste and the indentation gets fscked just press C-A:
 " inoremap <silent> <C-a> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
-" Map F2 to comment the selected lines in visual mode (// style comments)
-vmap <F2> :s/^/\/\/\ /g <CR> :noh <CR>
+" " Map F2 to comment the selected lines in visual mode (// style comments)
+" vmap <F2> :s/^/\/\/\ /g <CR> :noh <CR>
 
-" Map F3 to uncomment the selected lines in visual mode
-vmap <F3> :s/^\/\/\ //g <CR> :noh <CR>
+" " Map F3 to uncomment the selected lines in visual mode
+" vmap <F3> :s/^\/\/\ //g <CR> :noh <CR>
 
 " " Map F4 to open a taglist window -- requires the taglist plugin
 " nnoremap <silent> <F4> :Tlist<CR>
@@ -112,32 +86,11 @@ set wcm=<C-Z>
 map <F4> :emenu <C-Z>
 
 
-" theme settings for GUI
-if has("gui_running")
-  colorscheme koehler
-  highlight Normal guibg=black guifg=grey90
-  "set mousemodel=popup_setpos
-
-  " kvim/gvim use different notations for fonts.
-  if has("gui_kde") 
-    set guioptions=agimLtT  " this appears to fix the window resizing in kvim (hides scrollbar)
-    set guifont=Fixed\ [Misc]/10/-1/5/50/0/0/0/1/0 
-  else
-    if has("gui_gtk") 
-      set guifont=-misc-fixed-medium-r-normal-*-*-100-*-*-c-*-iso10646-1 
-      " for terminal: dec-terminal-medium-r-normal-*-*-140-*-*-c-*-iso8859-1 
-    else
-      if has("win32")
-        set guifont=Fixedsys:h9:cANSI
-      endif
-    endif   
-  endif 
-
-endif
+" XXX forcing terminal colors
+set t_Co=256
 
 
 " color settings (if terminal/gui supports it)
-set t_Co=256
 if &t_Co > 2 || has("gui_running")
   syntax on          " enable colors
   colorscheme ir_black
@@ -154,40 +107,10 @@ let spell_auto_type = "tex,mail,text,html,sgml,otl,cvs,none"
 map <F7> :SpellCheck <CR>
 
 
-
-" " Really fancy status line from Sven Guckes
-" set statusline=Vim-%{Version()}\ %{getcwd()}\ \ %1*[%02n]%*\ %(%M%R%H%)\ %2*%F%*\ %=%{Options()}\ %3*<%l,%c%V>%*
-" 
-" fu! Version()
-"   return version
-" endf
-" 
-" fu! Options()
-"   let opt=""
-" 
-"   if &ai|            let opt=opt." ai"              |endif " autoindent
-"   if &et|            let opt=opt." et"              |endif " expandtab
-"   if &hls|           let opt=opt." hls"             |endif " hlsearch
-"   if &paste|         let opt=opt." paste"           |endif " paste
-"   if &shiftwidth!=8| let opt=opt." sw=".&shiftwidth |endif " shiftwidth
-" 
-"   let opt=opt." tw=".&tw  "  textwidth - show always!
-" 
-"   return opt
-" endf
-
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
 filetype plugin on
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
 " filetype indent on
 
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" Starting with Vim 7, the filetype of empty .tex files defaults to
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
@@ -199,17 +122,12 @@ if has("autocmd")
   " For debugging
   "set verbose=9
 
-
-  " if bash is sh.
-  let bash_is_sh=1
-
+  let zsh_is_sh=1
 
   " change to directory of current file automatically
   autocmd BufEnter * lcd %:p:h
 
-
-  "autocmd FileType c,cpp,slang set cindent
-
+  autocmd FileType c,cc,cpp,slang set cindent
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vdboor
@@ -224,6 +142,10 @@ if has("autocmd")
 
   augroup gap 
   	au BufReadPre,BufNewFile *.gap set filetype=gap 
+  augroup END
+
+  augroup markdown
+  	au BufReadPre,BufNewFile *.md set filetype=markdown
   augroup END
 
   augroup perl
@@ -244,7 +166,6 @@ if has("autocmd")
     "   
   augroup END
 
-
   " Always jump to the last known cursor position. 
   " Don't do it when the position is invalid or when inside
   " an event handler (happens when dropping a file on gvim). 
@@ -253,16 +174,6 @@ if has("autocmd")
     \   exe "normal g`\"" | 
     \ endif 
     
-endif " has("autocmd")
+endif 
 
-
-" Added to default to high security (from Gentoo; bug #14088).
-" Gentoo devs changed this from "modelines=0" to "nomodeline"
-" according to the conversation on the vim devel mailing list:
-" http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=212696
-" http://article.gmane.org/gmane.editors.vim.devel/4410
-" (SUSE's default vimrc still uses "modelines=0")
 set nomodeline   " disable the magic "vim: .." lines in files
-
-
-" end of file
